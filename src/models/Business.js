@@ -34,4 +34,6 @@ const businessSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Business', businessSchema);
+const BussinessModel= mongoose.model('Business', businessSchema);
+
+module.exports = BussinessModel ;

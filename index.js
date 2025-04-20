@@ -12,6 +12,8 @@ const morgan = require("morgan");
 // const subcategoryRoutes = require('./src/routes/categoryRoutes');
 // const jobRoutes = require('./src/routes/jobRoutes');
 // const advertisementRoutes = require('./src/routes/advertisementRoutes');
+const userRouter = require ('./src/routes/UserRouter');
+const BussinessRouter = require("./src/routes/BussinessRouter");
 
 dotenv.config();
 const app = express();
@@ -30,6 +32,7 @@ app.use(morgan());
 // app.use('/api/subcategory', subcategoryRoutes);
 // app.use('/api/jobs', jobRoutes);
 // app.use('/api/advertisements', advertisementRoutes);
+app.use("/api/Users",userRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -41,7 +44,7 @@ app.get("/", async (req, res) => {
     
       res.status(200).json({
         success: "Hello from the server",
-        message: "Server is running perfectly fine",
+        message: "Server is running perfectly",
       });
 
 });
