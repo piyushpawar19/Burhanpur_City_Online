@@ -36,7 +36,7 @@ module.exports.getAllUser = async (req,res)=>{
         const userDetails = await UserModel.find();
         res.status(200).json(successResponse(200,"User Details is fetched",userDetails));
     } catch (error) {
-        res.status(500).json(errorResponse,(500,"Details is not found"));
+        res.status(500).json(errorResponse(500,"Details is not found"));
     }
 };
 
@@ -48,9 +48,9 @@ module.exports.updateUer = async (req,res)=>{
             new:true,
             runValidators:true
         })
-        res.status(200).json(successResponse,(200,"User is updated successfully",updatedUser));
+        res.status(200).json(successResponse(200,"User is updated successfully",updatedUser));
     } catch (error) {
-        res.status(500).json(errorResponse,(500,"User is not Updated"));
+        res.status(500).json(errorResponse(500,"User is not Updated"));
     }
 };
 
@@ -58,9 +58,9 @@ module.exports.deleteUser = async (req,res)=>{
     try {
         const id = req.params.id;
         const deletedUser = await UserModel.findByIdAndDelete(id);
-        res.status(200).json(successResponse,(200,"User is deleted successfully",deletedUser));
+        res.status(200).json(successResponse(200,"User is deleted successfully",deletedUser));
     } catch (error) {
-        res.status(500).json(errorResponse,(500,"User is not deleted"));
+        res.status(500).json(errorResponse(500,"User is not deleted"));
     }
 };
 
@@ -71,20 +71,22 @@ module.exports.adminLogin = async (req,res)=>{
         const existPhone = await UserModel.findOne({phone});
         if(!existPhone)
         {
-            res.status(404).json(errorResponse,(404,"Email is not found"));
+            res.status(404).json(errorResponse(404,"Phone no. is not found"));
         }
         // console.log("Email not found")
         const compare = await bcrypt.compare(password,existPhone.password);
         if(!compare){
-            res.status(404).json({message:"Invalide credential"});
+            res.status(404).json(errorResponse(404,"Invalid Credentials"));
         }
         // console.log(ACCESS_TOKEN_SECRET);
         
         const token = jwt.sign({userId: existPhone._id},JWT_SECRET);
-       res.status(200).json({message:"Token is generated suceessfully",token});
+        console.log(existPhone.role);
+        
+        res.status(200).json(successResponse(404,"Token is generated successfully",token));
 
     } catch (error) {
-     res.status(500).json({message:"Not Registered ",details:error.message});
+        res.status(404).json(errorResponse(404,"User Login failed"));
     }
 };
 

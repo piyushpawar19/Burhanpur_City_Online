@@ -4,9 +4,16 @@ const subCategorySchema = new mongoose.Schema({
   name: { type: String, required: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
   description: String,
-  icon: String,
+  image: String,
+  speciality:String,
+  rating:Number,
+  address:String,
+  timing:String,
+  calling:Number,
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('SubCategory', subCategorySchema);
+SubcategoryModel = mongoose.model('SubCategory', subCategorySchema);
+
+module.exports = SubcategoryModel ;

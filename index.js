@@ -6,38 +6,41 @@ const connectDB = require('./src/config/database');
 const morgan = require("morgan");
 
 // Routes
-// const authRoutes = require('./src/routes/authRoutes');
-// const businessRoutes = require('./src/routes/businessRoutes');
-// const categoryRoutes = require('./src/routes/categoryRoutes');
-// const subcategoryRoutes = require('./src/routes/categoryRoutes');
-// const jobRoutes = require('./src/routes/jobRoutes');
-// const advertisementRoutes = require('./src/routes/advertisementRoutes');
 const userRouter = require ('./src/routes/UserRouter');
 const BussinessRouter = require("./src/routes/BussinessRouter");
+const categoryRoutes = require('./src/routes/categoryRouter');
+const subcategoryRoutes = require('./src/routes/subcategoryRoutes');
+// const jobRoutes = require('./src/routes/jobRoutes');
+// const advertisementRoutes = require('./src/routes/advertisementRoutes');
+
 
 dotenv.config();
 const app = express();
-
+connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use(morgan());
+app.use(morgan('dev'));
 
 // // Routes
-// app.use('/api/auth', authRoutes);
-// app.use('/api/business', businessRoutes);
-// app.use('/api/category', categoryRoutes);
-// app.use('/api/subcategory', subcategoryRoutes);
+app.use("/api/Users",userRouter);
+app.use("/api/bussiness",BussinessRouter);
+app.use('/api/category', categoryRoutes);
+app.use('/api/subcategory', subcategoryRoutes);
 // app.use('/api/jobs', jobRoutes);
 // app.use('/api/advertisements', advertisementRoutes);
-app.use("/api/Users",userRouter);
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  console.error('Error:', err.stack);
+  res.status(500).json({
+    success: false,
+    message: 'Something went wrong!',
+    error: err.message,
+  });
 });
 
 app.get("/", async (req, res) => {
@@ -49,7 +52,7 @@ app.get("/", async (req, res) => {
 
 });
 
-connectDB();
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

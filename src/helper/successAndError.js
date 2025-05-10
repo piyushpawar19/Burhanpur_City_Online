@@ -1,18 +1,21 @@
-const errorResponse = (status, message, error = null) => {
-    return {
-      status,
-      success: false,
-      message,
-      error,
-    };
+const errorResponse = (status, message, error) => {
+  const response = {
+    status,
+    success: false,
+    message,
   };
-  const successResponse = (status, message, result = null) => {
-    return {
-      status,
-      success: true,
-      message,
-      result,
-    };
+  if (error !== undefined) response.error = error;
+  return response;
+};
+
+const successResponse = (status, message, result) => {
+  const response = {
+    status,
+    success: true,
+    message,
   };
-  module.exports = { successResponse, errorResponse };
-  
+  if (result !== undefined) response.result = result;
+  return response;
+};
+
+module.exports = { successResponse, errorResponse };
